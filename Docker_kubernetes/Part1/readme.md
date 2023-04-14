@@ -62,12 +62,6 @@ docker run --name <nombre del contenedor> <nombre de la imagen>
 ```
 
 ### Detener un contenedor
-
-```
-docker stop <nombre del contenedor | identificador del contenedor>              ```
-
-### Detener un contenedor
-
 ```
 docker stop <nombre del contenedor | identificador del contenedor>
 ```
