@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: curso-sa
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sa-test
+  labels:
+    app: front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      serviceAccountName: curso-sa
+      containers:
+        - name: nginx
+          image: nginx:alpine
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: sa-reader
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sa-pods
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: curso-sa
+    apiGroup: ""
+roleRef:
+  kind: Role
+  name: sa-reader
+  apiGroup: rbac.authorization.k8s.io

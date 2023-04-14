@@ -1,0 +1,5 @@
+FROM centos:7
+
+RUN yum update -y && groupadd -r user && useradd -r -g user sergio
+
+USER sergio

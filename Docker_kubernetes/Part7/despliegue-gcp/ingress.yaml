@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-app
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: frontend-svc
+              servicePort: 80
+          - path: /api/config
+            backend:
+              serviceName: frontend-svc
+              servicePort: 80
+          - path: /api/message
+            backend:
+              serviceName: backend1-svc
+              servicePort: 80

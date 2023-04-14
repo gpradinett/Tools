@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prd
+  labels:
+    name: prd
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: min-max
+  namespace: prd
+spec:
+  limits:
+    - max:
+        memory: 1G
+        cpu: 1.2
+      min:
+        memory: 256M
+        cpu: 0.5
+      type: Container
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: podtest
+  namespace: prd
+  labels:
+    app: backend
+    env: prd
+spec:
+  containers:
+    - name: contenedor1
+      image: nginx:alpine
+      resources:
+        requests:
+          memory: 256M
+          cpu: 0.5
+    - name: contenedor2
+      image: jenkins/jenkins
+      resources:
+        requests:
+          memory: 256M
+          cpu: 0.5
+    - name: contenedor3
+      image: python:3.7-alpine
+      command:
+        [
+          "sh",
+          "-c",
+          "echo 'contenedor1' > index.html && python -m http.server 8081",
+        ]
+      resources:
+        requests:
+          memory: 1G
+          cpu: 1

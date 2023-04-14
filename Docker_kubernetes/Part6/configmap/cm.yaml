@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vars-database
+data:
+  db_host: dev.host.local
+  db_user: dev_user
+  db_pass: dev_pass
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: desploy-cm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: vars-database
+                  key: db_host
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: vars-database
+                  key: db_user

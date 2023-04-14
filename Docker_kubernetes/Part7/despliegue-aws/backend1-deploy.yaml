@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend1
+  labels:
+    app: backend1-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend1-app
+  template:
+    metadata:
+      labels:
+        app: backend1-app
+    spec:
+      containers:
+        - name: backend1-container
+          image: 282865065290.dkr.ecr.us-east-2.amazonaws.com/backend1
+          resources:
+            limits:
+              memory: "50Mi"
+              cpu: "100m"
+          ports:
+            - containerPort: 3100
+          env:
+            - name: PORT
+              value: "3100"
+            - name: SERVICE_BACKEND2
+              value: http://backend2-svc/api/message

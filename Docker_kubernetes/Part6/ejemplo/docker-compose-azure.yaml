@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: group05.azurecr.io/frontend
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      - PORT=3000
+      - SERVICE_BACKEND1=http://localhost:9100/api/message
+    ports:
+      - "9000:3000"
+    networks:
+      - network_ms
+
+  backend1:
+    image: group05.azurecr.io/backend1
+    container_name: backend1
+    build:
+      context: .
+      dockerfile: backend1/Dockerfile
+    environment:
+      - PORT=3100
+      - SERVICE_BACKEND2=http://backend2:3200/api/message
+    ports:
+      - "9100:3100"
+    networks:
+      - network_ms
+
+  backend2:
+    image: group05.azurecr.io/backend2
+    container_name: backend2
+    build:
+      context: .
+      dockerfile: backend2/Dockerfile
+    environment:
+      - PORT=3200
+    networks:
+      - network_ms
+
+networks:
+  network_ms:
